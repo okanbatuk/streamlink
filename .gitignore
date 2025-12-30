@@ -1,0 +1,45 @@
+# Zed IDE
+.zed
+
+# Vscode
+.vscode/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# Dependency directories
+node_modules/
+
+# Prisma
+prisma/migrations/dev.db
+prisma/migrations/*.sql
+prisma/generated/client
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Build
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# REST Client dosyaları
+requests/
+*.http
