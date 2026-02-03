@@ -1,5 +1,5 @@
-import { Pool } from "pg";
 import { config } from "dotenv-safe";
+import { Pool } from "pg";
 
 config();
 

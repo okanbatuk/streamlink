@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "bun --hot src/server.ts",
-    "build": "esbuild src/server.ts --bundle --platform=node --outdir=dist --minify --sourcemap --external:pg --external:ioredis --external:@fastify/*",
+    "build": "esbuild src/server.ts --bundle --platform=node --format=esm --target=node20 --outdir=dist --outbase=src --sourcemap --packages=external",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit"
   },
