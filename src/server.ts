@@ -1,27 +1,23 @@
-// src/server.ts
 import { createApp } from "./app.js";
-import { config } from "./config/env.js";
 import { createDependencies } from "./config/deps.js";
+import { config } from "./config/env.js";
 import { registerShutdownHandlers } from "./lib/shutdown.js";
 
-const deps = createDependencies();
+const deps = await createDependencies();
 registerShutdownHandlers(deps);
 
 const app = createApp(deps);
 
-const start = async () => {
-  try {
-    const { port, host } = config;
-    await app.listen({ port, host });
-    console.log(`🚀 Server running on http://${host}:${port}`);
-  } catch (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
-};
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-  start();
+export async function start() {
+	const { PORT, HOST } = config;
+	await app.listen({ port: PORT, host: HOST });
+	console.log(`🚀 Server running on http://${HOST}:${PORT}`);
 }
 
-export { app, start };
+if (import.meta.main) {
+	start().catch(async (err) => {
+		app.log.error(err);
+		await app.close();
+		process.exit(1);
+	});
+}

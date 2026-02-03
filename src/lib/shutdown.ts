@@ -1,28 +1,32 @@
-import { Dependencies as Deps } from "../config/deps.js";
+import type { InfraDeps } from "../config/deps.js";
 
 let isShuttingDown = false;
 
-export function registerShutdownHandlers(deps: Deps) {
-  const cleanup = async () => {
-    if (isShuttingDown) return;
-    isShuttingDown = true;
+export function registerShutdownHandlers(deps: InfraDeps) {
+	const shutdown = async () => {
+		if (isShuttingDown) return;
+		isShuttingDown = true;
 
-    console.log("🔁 Shutting down gracefully...");
-    await Promise.allSettled([
-      deps.redis.quit().catch(ignoreExpectedErrors),
-      deps.db.end().catch(ignoreExpectedErrors),
-    ]);
-    console.log("✅ Clean shutdown complete.");
-    process.exit(0);
-  };
+		console.log("🛑 Shutting down...");
 
-  process.once("SIGINT", cleanup);
-  process.once("SIGTERM", cleanup);
-}
+		try {
+			await deps.db.end();
+		} catch (err) {
+			console.error("DB shutdown error:", err);
+		}
 
-function ignoreExpectedErrors(err: unknown) {
-  const msg = (err as Error)?.message || "";
-  if (!msg.includes("more than once") && !msg.includes("ending")) {
-    console.error(err);
-  }
+		if (deps.redis) {
+			try {
+				await deps.redis.quit();
+			} catch (err) {
+				console.error("Redis shutdown error:", err);
+			}
+		}
+
+		console.log("✅ Shutdown complete");
+		process.exit(0);
+	};
+
+	process.once("SIGINT", shutdown);
+	process.once("SIGTERM", shutdown);
 }

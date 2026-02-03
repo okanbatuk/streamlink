@@ -3,9 +3,12 @@ import { config } from "dotenv-safe";
 
 config();
 
-const pool = new Pool({
+const migrationPool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 const CREATE_URLS_TABLE = `
@@ -19,13 +22,13 @@ CREATE TABLE IF NOT EXISTS urls (
 
 export async function migrate() {
   console.log("Running migrations...");
-  const client = await pool.connect();
+  const client = await migrationPool.connect();
   try {
     await client.query(CREATE_URLS_TABLE);
     console.log("Urls table ensured");
   } finally {
     client.release();
-    await pool.end();
+    await migrationPool.end();
   }
 }
 

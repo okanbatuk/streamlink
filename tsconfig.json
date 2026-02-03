@@ -5,6 +5,8 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "lib": ["ES2022", "DOM"], // DOM: AbortController, EventTarget için
+    "types": ["node"],
+    "typeRoots": ["./types", "./node_modules/@types"],
 
     // Strict
     "strict": true,
