@@ -1,11 +1,9 @@
-import { Pool } from "pg";
-import { Redis } from "ioredis";
+import type { Redis } from "ioredis";
+import type { Pool } from "pg";
 
 declare module "fastify" {
-  interface FastifyInstance {
-    db: Pool;
-    redis: Redis;
-  }
+	interface FastifyInstance {
+		db: Pool;
+		redis?: Redis;
+	}
 }
-
-export {};
