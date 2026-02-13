@@ -14,10 +14,8 @@ export async function start() {
   console.log(`🚀 Server running on http://${HOST}:${PORT}`);
 }
 
-if (import.meta.main) {
-  start().catch(async (err) => {
-    app.log.error(err);
-    await app.close();
-    process.exit(1);
-  });
-}
+start().catch(async (err) => {
+  app.log.error(err);
+  await app.close();
+  process.exit(1);
+});
