@@ -9,13 +9,13 @@ registerShutdownHandlers(deps);
 const app = createApp(deps);
 
 export async function start() {
-  const { PORT, HOST } = config;
-  await app.listen({ port: PORT, host: HOST });
-  console.log(`🚀 Server running on http://${HOST}:${PORT}`);
+	const { PORT, HOST } = config;
+	await app.listen({ port: PORT, host: HOST });
+	console.log(`🚀 Server running on http://${HOST}:${PORT}`);
 }
 
 start().catch(async (err) => {
-  app.log.error(err);
-  await app.close();
-  process.exit(1);
+	app.log.error(err);
+	await app.close();
+	process.exit(1);
 });
